@@ -47,7 +47,7 @@ def process(input_file, output_file):
                 empty_rows += 1
                 continue
 
-            if row[job_type_index] == "warranty" and row[insurer_index] == "halo":
+            if row[job_type_index] == "warranty": #and row[insurer_index] == "halo": is this halo check critical if yes then the count is 667
                 warranty_jobs += 1
                 continue
             
@@ -55,14 +55,15 @@ def process(input_file, output_file):
             total_number_of_instructions += 1
                 
             if row[milestone_index]:
-                if row[milestone_index] in ["~closed", "cancelled", "deleted"]:
+                if row[milestone_index] in ["closed", "cancelled", "deleted"]:
                     cancellations += 1
-                elif row[arrived_on_index]:
+                
+                elif row[due_on_index].strip() or row[arrived_on_index].strip():
                     booked += 1
 
     with open(output_file, 'w') as f:
         remaining = total_number_of_instructions - cancellations
-        total_loss_8_percent = round(remaining - remaining * .08)
+        total_loss_8_percent = round(remaining - (remaining * .08)) # total loss percent should be rounded off?
         
         writer = csv.writer(f)
         writer.writerow(["Week", week_date])
@@ -71,10 +72,10 @@ def process(input_file, output_file):
         writer.writerow(["Remaining", remaining])
         writer.writerow(["Minus total loss (8%)", total_loss_8_percent])
         writer.writerow(["Booked", booked])
-        writer.writerow(["Capture rate", round(booked / total_loss_8_percent)])
+        writer.writerow(["Capture rate", f"{round(booked / total_loss_8_percent * 100)}%"])
 
 
 
 
 if __name__ == "__main__":
-    process("/Users/sameedbaig/Downloads/08.04.csv")
+    process("path/to/input.csv", "path/to/output.csv")

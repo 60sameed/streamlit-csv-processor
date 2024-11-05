@@ -2,10 +2,12 @@
 
 1. Create conda environment
     ```sh
-        conda create -f environment.yml
+        conda create -n streamlit python=3.11
+        conda activate streamlit
+        pip install -r requirements.txt
     ```
 
 2. Run streamlit app
     ```sh
-        streamlit run statsupload.py --server.address 192.168.0.58 --server.port 8501
+        streamlit run main.py --server.address 0.0.0.0 --server.port 8501
     ```
